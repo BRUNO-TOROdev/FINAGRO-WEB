@@ -15,7 +15,7 @@ const organizationA: OrganizationContext = {
 };
 const organizationReadOnly: OrganizationContext = {
   ...organizationA, roleName: "Somente leitura", roleId: "read-only",
-  permissions: ["farms.view", "seasons.view"],
+  permissions: ["farms.view", "seasons.view", "entries.view", "parties.view", "bank_accounts.view"],
 };
 
 class FakeRepository implements AuthorizationRepository {
@@ -65,5 +65,18 @@ describe("autorização multi-tenant", () => {
   it("exige autenticação antes de resolver organização", async () => {
     const repo = new FakeRepository({});
     await expect(authorizeOrganization(repo, null, "organizacao-a")).rejects.toBeInstanceOf(AuthenticationRequiredError);
+  });
+
+  it("READ_ONLY visualiza lançamentos mas não cria nem edita", async () => {
+    const repo = new FakeRepository({ "reader:organizacao-a": organizationReadOnly });
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "entries.view")).resolves.toEqual(organizationReadOnly);
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "entries.create")).rejects.toBeInstanceOf(PermissionDeniedError);
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "entries.update")).rejects.toBeInstanceOf(PermissionDeniedError);
+  });
+
+  it("READ_ONLY não administra contrapartes ou contas bancárias", async () => {
+    const repo = new FakeRepository({ "reader:organizacao-a": organizationReadOnly });
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "parties.manage")).rejects.toBeInstanceOf(PermissionDeniedError);
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "bank_accounts.manage")).rejects.toBeInstanceOf(PermissionDeniedError);
   });
 });

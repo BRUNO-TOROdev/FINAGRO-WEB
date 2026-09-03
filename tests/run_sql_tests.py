@@ -15,6 +15,7 @@ TEST_FILES = (
     ROOT / "tests" / "app_foundation_security.sql",
     ROOT / "tests" / "configuration_modules.sql",
     ROOT / "tests" / "finagro_chart_template.sql",
+    ROOT / "tests" / "financial_entries_operational.sql",
 )
 
 

@@ -1,5 +1,15 @@
 # FINAGRO Web — Decisões da Fundação de Dados v0.2
 
+## Núcleo operacional financeiro — 2026-09-03
+
+- Contrapartes, contas bancárias e lançamentos reutilizam as entidades homologadas; nenhuma entidade paralela foi criada.
+- `save_financial_entry` é a única operação pública usada pela interface para criar/editar lançamento e sua apropriação. A função executa lançamento e apropriações na mesma transação e valida novamente permissões e referências no PostgreSQL.
+- A edição de um lançamento `PAGO` ou com liquidação ativa é bloqueada nesta etapa. Alterações de valor, fazenda ou regra regeneram apropriações atomicamente; alterações em outros campos preservam o snapshot já gravado.
+- Apropriação direta cria uma única linha de 100%. Rateio usa exclusivamente regra ativa da mesma organização e safra, criando várias apropriações sem multiplicar o lançamento ou o pagamento.
+- O centavo residual continua seguindo o motor homologado: é atribuído à última fazenda na ordenação determinística por UUID, garantindo soma exata do valor.
+- Vendedor/beneficiado é representado pela contraparte opcional existente. Não foi criado um segundo vínculo complexo nesta etapa.
+- Forma de pagamento permanece separada da conta bancária. Parcelamentos e liquidações continuam fora do escopo visual.
+- A listagem usa RPC paginada, com limite máximo de 100 linhas por chamada (25 na interface), e aplica filtros no PostgreSQL sob RLS.
 ## Status
 Somente `PENDENTE`, `AGENDADO`, `PAGO`.
 

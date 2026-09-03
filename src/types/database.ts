@@ -63,3 +63,9 @@ export type AllocationRule = {
 };
 
 export type AppUser = { id: string; email?: string; user_metadata?: { full_name?: string } };
+
+export type Party = { id: string; organization_id: string; name: string; tax_id: string | null; party_type: "FORNECEDOR" | "CLIENTE" | "AMBOS" | "BENEFICIARIO" | "OUTRO"; email: string | null; phone: string | null; is_active: boolean };
+export type BankAccount = { id: string; organization_id: string; farm_id: string | null; bank_code: string | null; bank_name: string; branch_number: string | null; account_number: string; account_type: string | null; opening_balance: string; opening_balance_date: string | null; is_active: boolean };
+export type PaymentMethod = { id: string; organization_id: string; name: string; is_active: boolean };
+export type FinancialEntry = { id: string; organization_id: string; entry_direction: "ENTRADA" | "SAIDA"; status: "PENDENTE" | "AGENDADO" | "PAGO"; issue_date: string; due_date: string; document_number: string | null; document_name: string | null; description: string; counterparty_id: string | null; chart_account_id: string; crop_season_id: string | null; payment_method_id: string | null; planned_bank_account_id: string | null; amount: string; notes: string | null };
+export type EntryAllocation = { id: string; farm_id: string; allocation_rule_id: string | null; percentage: string; allocated_amount: string; snapshot_rule_name: string | null; snapshot_crop_season_name: string | null };
