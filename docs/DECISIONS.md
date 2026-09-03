@@ -133,3 +133,20 @@ reais em `auth.users`. RLS nunca é desabilitada.
   safra/fazendas no tenant e exige soma `NUMERIC` exatamente igual a 100 para ativar.
 - A interface calcula percentuais em milionésimos inteiros (`BigInt`), nunca com
   ponto flutuante; a validação definitiva permanece no PostgreSQL.
+
+## Template Oficial do Plano de Contas FINAGRO V1 — 2026-09-03
+
+- A única fonte é `FINAGRO - Planilha Financeira (Em branco).xlsx`, aba
+  `Plano de Contas`. O binário permanece local e ignorado pelo Git; SHA-256,
+  células e relações extraídas ficam no arquivo canônico e no relatório.
+- A lista `Plano_de_Contas` alimenta o campo Grupo da Base de Dados; o Subgrupo
+  é resolvido por `INDIRECT($D7)`. Foram homologados 27 Grupos e 127 Subgrupos.
+- `display_name` substitui somente underscore por espaço. `source_name`, célula
+  de origem, nível, pai e aliases permanecem rastreáveis no template e na cópia.
+- As colisões pai/filho de Entrada de Financiamento e Saldo Inicial de Caixa são
+  intencionais e diferenciadas por ID, nível e pai, não por alteração do nome.
+- `Desp_com_Pessoal_*` é o valor operacional comprovado. `Despesa_com_Pessoal_*`
+  aparece somente como cabeçalho das listas de Subgrupos e é mantido como alias.
+- Os códigos `FINAGRO-V1-*` são identificadores internos estáveis, não códigos
+  contábeis. Como a fonte não fornece os campos gerenciais do novo schema, o
+  template usa `OUTRO`/`NEUTRA` e flags financeiras desativadas, sem inferência.
