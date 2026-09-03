@@ -12,6 +12,7 @@ TEST_FILES = (
     ROOT / "tests" / "business_invariants_smoke.sql",
     ROOT / "tests" / "p0_foundation.sql",
     ROOT / "tests" / "app_foundation_security.sql",
+    ROOT / "tests" / "configuration_modules.sql",
 )
 
 

@@ -34,4 +34,32 @@ export type CropSeason = {
   is_active: boolean;
 };
 
+export type ChartAccount = {
+  id: string;
+  organization_id: string;
+  parent_id: string | null;
+  code: string;
+  name: string;
+  level: number;
+  managerial_type: "RECEITA" | "CUSTO" | "DESPESA" | "INVESTIMENTO" | "FINANCIAMENTO" | "TRANSFERENCIA" | "SALDO_INICIAL" | "OUTRO";
+  nature: "ENTRADA" | "SAIDA" | "NEUTRA";
+  participates_dre: boolean;
+  participates_cashflow: boolean;
+  requires_farm: boolean;
+  allows_allocation: boolean;
+  requires_crop_season: boolean;
+  display_order: number;
+  is_active: boolean;
+};
+
+export type AllocationRule = {
+  id: string;
+  organization_id: string;
+  crop_season_id: string;
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  created_at: string;
+};
+
 export type AppUser = { id: string; email?: string; user_metadata?: { full_name?: string } };

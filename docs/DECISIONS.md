@@ -117,3 +117,19 @@ reais em `auth.users`. RLS nunca é desabilitada.
 - Convites externos ficaram fora desta etapa porque ainda não há decisão sobre
   provedor de e-mail, expiração, reenvio e aceite. A tela administra memberships
   existentes e documenta essa pendência.
+
+## Plano de Contas e Regras de Rateio v0.1 — 2026-09-03
+
+- A migration `202609030007_chart_accounts_allocation_configuration.sql` adiciona
+  nível materializado e proteção contra ciclos à árvore de `chart_accounts`. O
+  banco recalcula níveis descendentes quando uma conta é reposicionada.
+- Templates são copiados explicitamente e uma única vez por organização/template.
+  A cópia registra origem e versão, mas passa a ser integralmente tenant-owned.
+- O catálogo FINAGRO completo não foi populado: não existe dataset homologado no
+  repositório. A pendência e o contrato mínimo estão em
+  `docs/data/FINAGRO_CHART_TEMPLATE_PENDING.md`.
+- `allocation_rules.is_active=false` representa RASCUNHO e `true` representa ATIVA.
+  A RPC `save_allocation_rule` salva cabeçalho e itens em uma transação, valida
+  safra/fazendas no tenant e exige soma `NUMERIC` exatamente igual a 100 para ativar.
+- A interface calcula percentuais em milionésimos inteiros (`BigInt`), nunca com
+  ponto flutuante; a validação definitiva permanece no PostgreSQL.
