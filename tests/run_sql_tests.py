@@ -11,6 +11,7 @@ DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
 TEST_FILES = (
     ROOT / "tests" / "business_invariants_smoke.sql",
     ROOT / "tests" / "p0_foundation.sql",
+    ROOT / "tests" / "app_foundation_security.sql",
 )
 
 

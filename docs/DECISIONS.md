@@ -100,3 +100,20 @@ Correções técnicas comprovadas durante execução:
 A suíte `tests/p0_foundation.sql` usa IDs fixos de teste, transação com `ROLLBACK`
 e alterna para o role PostgreSQL `authenticated` com claims de dois usuários
 reais em `auth.users`. RLS nunca é desabilitada.
+
+## Fundação da aplicação v0.1 — 2026-09-03
+
+- A migration `202609030006_app_foundation.sql` é aditiva e não modifica as cinco
+  migrations financeiras homologadas.
+- A URL do tenant usa um `organizations.slug` imutável no banco, gerado pelo
+  banco com sufixo do UUID para evitar colisões. O slug é apenas navegação: sessão,
+  membership ativa, role e permissões continuam sendo resolvidos no servidor.
+- E-mails permanecem em `auth.users`. A aplicação os consulta somente pela RPC
+  `list_organization_members`, que é `SECURITY DEFINER`, tem `search_path` vazio e
+  exige `users.manage` no tenant solicitado.
+- Trocas de perfil passam pela RPC `change_membership_role`. Ela bloqueia mudança
+  do próprio perfil, acesso cross-tenant e atribuição/alteração de Proprietário por
+  quem não seja Proprietário.
+- Convites externos ficaram fora desta etapa porque ainda não há decisão sobre
+  provedor de e-mail, expiração, reenvio e aceite. A tela administra memberships
+  existentes e documenta essa pendência.

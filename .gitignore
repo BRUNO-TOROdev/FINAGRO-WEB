@@ -5,6 +5,11 @@ node_modules/
 dist/
 build/
 coverage/
+.next/
+playwright-report/
+test-results/
+pnpm-debug.log*
+*.tsbuildinfo
 
 .env
 .env.*
