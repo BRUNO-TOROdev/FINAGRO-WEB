@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { editableFinancialStatuses, formatBRL, moneyToDatabase, positivePage } from "./money";
+import { editableFinancialStatuses, formatBRL, moneyToDatabase, positivePage, splitMoneyEvenly } from "./money";
 
 describe("money without floating point", () => {
   it("converts pt-BR values exactly", () => expect(moneyToDatabase("R$ 125.000,09")).toBe("125000.09"));
@@ -7,4 +7,5 @@ describe("money without floating point", () => {
   it("formats database decimals", () => expect(formatBRL("125000.09")).toBe("R$ 125.000,09"));
   it("never offers PAGO for manual editing", () => expect(editableFinancialStatuses).toEqual(["PENDENTE", "AGENDADO"]));
   it("normalizes pagination", () => { expect(positivePage(undefined)).toBe(1); expect(positivePage("0")).toBe(1); expect(positivePage("3")).toBe(3); });
+  it("distributes installment cents deterministically", () => expect(splitMoneyEvenly("100,00",3)).toEqual(["33,34","33,33","33,33"]));
 });

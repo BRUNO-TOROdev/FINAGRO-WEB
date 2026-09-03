@@ -14,5 +14,10 @@ export function userMessage(error: unknown) {
   if (message.includes("AMOUNT_MUST_BE_POSITIVE") || message.includes("FINANCIAL_ENTRY_AMOUNT")) return "O valor deve ser maior que zero.";
   if (message.includes("ACTIVE_ALLOCATION_RULE_MUST_MATCH_ENTRY_SEASON")) return "A regra de rateio deve estar ativa e pertencer à mesma safra do lançamento.";
   if (message.includes("ACTIVE_CHART_ACCOUNT") || message.includes("ACTIVE_COUNTERPARTY") || message.includes("ACTIVE_BANK_ACCOUNT") || message.includes("ACTIVE_PAYMENT_METHOD")) return "Um cadastro selecionado está inativo ou pertence a outra organização.";
+  if (message.includes("INSTALLMENT_TOTAL_MUST_MATCH_PLAN")) return "A soma das parcelas deve ser exatamente igual ao valor total do plano.";
+  if (message.includes("DUPLICATE_INSTALLMENT") || message.includes("INSTALLMENT_NUMBERS")) return "A numeração das parcelas deve ser única e contínua.";
+  if (message.includes("SETTLEMENTS_CANNOT_EXCEED")) return "A baixa ultrapassa o saldo em aberto do lançamento.";
+  if (message.includes("REVERSAL_REASON_REQUIRED")) return "Informe o motivo da reversão.";
+  if (message.includes("PAID_ENTRY_STATUS") || message.includes("SCHEDULE_STATUS")) return "PAGO é um estado derivado e não pode ser alterado manualmente.";
   return "Não foi possível concluir a operação. Revise os dados e tente novamente.";
 }

@@ -24,3 +24,17 @@ export function positivePage(value: string | undefined) {
   if (!value || !/^\d+$/.test(value)) return 1;
   return Math.max(1, Number(value));
 }
+
+export function splitMoneyEvenly(raw: string, count: number): string[] {
+  if (!Number.isInteger(count) || count < 1) throw new Error("INVALID_INSTALLMENT_COUNT");
+  const database = moneyToDatabase(raw);
+  const [whole, fraction] = database.split(".");
+  const cents = BigInt(whole) * 100n + BigInt(fraction);
+  const divisor = BigInt(count);
+  const base = cents / divisor;
+  const residual = cents % divisor;
+  return Array.from({ length: count }, (_, index) => {
+    const part = base + (BigInt(index) < residual ? 1n : 0n);
+    return `${part / 100n},${(part % 100n).toString().padStart(2, "0")}`;
+  });
+}

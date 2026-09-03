@@ -10,6 +10,16 @@
 - Vendedor/beneficiado é representado pela contraparte opcional existente. Não foi criado um segundo vínculo complexo nesta etapa.
 - Forma de pagamento permanece separada da conta bancária. Parcelamentos e liquidações continuam fora do escopo visual.
 - A listagem usa RPC paginada, com limite máximo de 100 linhas por chamada (25 na interface), e aplica filtros no PostgreSQL sob RLS.
+
+## Parcelamentos, agendamento e liquidações — 2026-09-03
+
+- `installment_plans` permanece sem impacto financeiro. A RPC `create_installment_plan` valida o cronograma completo e cria plano, parcelas e apropriações em uma única transação; somente os `financial_entries` das parcelas compõem valores financeiros.
+- As parcelas herdam a classificação principal no MVP e possuem individualmente número, vencimento, valor, status e liquidações. A apresentação `01/05` é derivada dos campos estruturados.
+- A sugestão de divisão igual usa centavos inteiros e distribui o resíduo deterministically nas primeiras parcelas. O PostgreSQL exige soma exatamente igual ao total.
+- `PENDENTE` e `AGENDADO` podem alternar via RPC autorizada. `PAGO` continua derivado exclusivamente das liquidações ativas.
+- Liquidações são criadas por RPC com conta bancária real, forma de pagamento opcional, data e valor. Saldo é derivado; sobrepagamento é recusado sob bloqueio da linha do lançamento.
+- A reversão continua pela RPC homologada, exige motivo e preserva a liquidação original. Por padrão retorna a `PENDENTE`; a interface permite restaurar `AGENDADO` explicitamente.
+- Lançamentos com liquidação ativa permanecem bloqueados contra edição pela RPC operacional. Correção de baixa é reversão seguida de nova liquidação.
 ## Status
 Somente `PENDENTE`, `AGENDADO`, `PAGO`.
 

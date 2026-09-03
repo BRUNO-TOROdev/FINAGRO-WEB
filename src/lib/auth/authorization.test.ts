@@ -79,4 +79,12 @@ describe("autorização multi-tenant", () => {
     await expect(authorizeOrganization(repo, "reader", "organizacao-a", "parties.manage")).rejects.toBeInstanceOf(PermissionDeniedError);
     await expect(authorizeOrganization(repo, "reader", "organizacao-a", "bank_accounts.manage")).rejects.toBeInstanceOf(PermissionDeniedError);
   });
+
+  it("READ_ONLY vê o ciclo financeiro mas não agenda, baixa ou reverte", async () => {
+    const repo = new FakeRepository({ "reader:organizacao-a": organizationReadOnly });
+    await expect(authorizeOrganization(repo, "reader", "organizacao-a", "entries.view")).resolves.toEqual(organizationReadOnly);
+    for (const permission of ["entries.update", "settlements.create", "settlements.reverse"]) {
+      await expect(authorizeOrganization(repo, "reader", "organizacao-a", permission)).rejects.toBeInstanceOf(PermissionDeniedError);
+    }
+  });
 });
