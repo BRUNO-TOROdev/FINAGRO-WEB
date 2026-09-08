@@ -29,3 +29,10 @@ test("rota de orçamentos preserva a fronteira autenticada", async ({ request })
   expect(response.status()).toBeLessThan(400);
   expect(response.headers().location).toContain("/login");
 });
+
+test("rota da DRE preserva a fronteira autenticada", async ({ request }) => {
+  const response = await request.get("/app/tenant-inexistente/relatorios/dre", { maxRedirects: 0 });
+  expect(response.status()).toBeGreaterThanOrEqual(300);
+  expect(response.status()).toBeLessThan(400);
+  expect(response.headers().location).toContain("/login");
+});

@@ -206,3 +206,21 @@ reais em `auth.users`. RLS nunca é desabilitada.
 - As anomalias históricas documentadas (juros, Comissão, referência quebrada,
   cross-block da DRE Safra e percentuais fixos divergentes) não foram promovidas
   a regras de planejamento.
+
+## DRE realizado v0.1 — 2026-09-08
+
+- A DRE usa exclusivamente `financial_entries.issue_date`; vencimento,
+  agendamento e liquidação não alteram a competência.
+- A fórmula histórica não filtra STATUS. Lançamentos `PENDENTE`, `AGENDADO` e
+  `PAGO` participam quando a conta possui mapping DRE.
+- Fazenda e consolidado usam os snapshots de `entry_allocations`. A regra de
+  rateio atual nunca recalcula o histórico.
+- Valores analíticos permanecem positivos. As linhas calculadas usam operandos
+  explícitos por papel gerencial ou código estável de outra linha, com
+  coeficientes configurados; nomes de contas não participam do cálculo.
+- Cada conta pode alimentar somente uma linha analítica por estrutura. Pais
+  exibem seus descendentes, enquanto resultados agregam cada lançamento uma vez.
+- Lançamentos sem mapping não desaparecem: a RPC retorna contagem, valor e conta
+  agregada na cobertura, sem expor contraparte, descrição ou documento.
+- A exceção histórica do período de juros não foi promovida. A regra homologada
+  de emissão vale para toda a DRE realizada.
