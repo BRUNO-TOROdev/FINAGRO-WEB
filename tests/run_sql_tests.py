@@ -18,6 +18,7 @@ TEST_FILES = (
     ROOT / "tests" / "financial_entries_operational.sql",
     ROOT / "tests" / "installments_settlements.sql",
     ROOT / "tests" / "financing_management.sql",
+    ROOT / "tests" / "managerial_chart_mappings.sql",
 )
 
 
@@ -51,6 +52,22 @@ def verify_canonical_template() -> None:
         raise AssertionError("database template differs from the canonical FINAGRO JSON")
 
 
+def verify_managerial_mapping() -> None:
+    canonical = json.loads((ROOT / "docs" / "data" / "finagro-managerial-mapping-v1.json").read_text(encoding="utf-8"))
+    if len(canonical["accounts"]) != 154:
+        raise AssertionError("managerial mapping must audit all 154 official accounts")
+    with psycopg.connect(DATABASE_URL) as connection:
+        structures, mappings, inferred = connection.execute(
+            """select (select count(*) from public.reporting_templates),
+                      (select count(*) from public.report_account_template_mappings),
+                      (select count(*) from public.report_account_template_mappings where confidence='inferred_needs_validation')"""
+        ).fetchone()
+    if structures != len(canonical["structures"]):
+        raise AssertionError("database reporting structures differ from canonical mapping")
+    if mappings != canonical["counts"]["operational_mappings"] or inferred != 0:
+        raise AssertionError("database managerial mappings differ from confirmed canonical mappings")
+
+
 def main() -> int:
     for test_file in TEST_FILES:
         sql = test_file.read_text(encoding="utf-8")
@@ -67,6 +84,12 @@ def main() -> int:
         print(f"FAIL finagro-chart-template-v1.json: {error}", file=sys.stderr)
         return 1
     print("PASS finagro-chart-template-v1.json (154 exact records)")
+    try:
+        verify_managerial_mapping()
+    except Exception as error:
+        print(f"FAIL finagro-managerial-mapping-v1.json: {error}", file=sys.stderr)
+        return 1
+    print("PASS finagro-managerial-mapping-v1.json (154 audited accounts)")
     return 0
 
 
