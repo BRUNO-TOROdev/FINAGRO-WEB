@@ -22,3 +22,10 @@ test("rota de financiamentos preserva a fronteira autenticada", async ({ request
   expect(response.status()).toBeLessThan(400);
   expect(response.headers().location).toContain("/login");
 });
+
+test("rota de orçamentos preserva a fronteira autenticada", async ({ request }) => {
+  const response = await request.get("/app/tenant-inexistente/orcamentos", { maxRedirects: 0 });
+  expect(response.status()).toBeGreaterThanOrEqual(300);
+  expect(response.status()).toBeLessThan(400);
+  expect(response.headers().location).toContain("/login");
+});

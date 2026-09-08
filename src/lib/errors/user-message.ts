@@ -19,5 +19,8 @@ export function userMessage(error: unknown) {
   if (message.includes("SETTLEMENTS_CANNOT_EXCEED")) return "A baixa ultrapassa o saldo em aberto do lançamento.";
   if (message.includes("REVERSAL_REASON_REQUIRED")) return "Informe o motivo da reversão.";
   if (message.includes("PAID_ENTRY_STATUS") || message.includes("SCHEDULE_STATUS")) return "PAGO é um estado derivado e não pode ser alterado manualmente.";
+  if (message.includes("ACCOUNT_WITHOUT_MANAGERIAL_MAPPING")) return "Conta sem classificação gerencial para esta estrutura.";
+  if (message.includes("PUBLISHED_BUDGET_VERSION_IS_IMMUTABLE")) return "A versão publicada é imutável. Crie uma nova revisão para alterar o planejamento.";
+  if (message.includes("BUDGET_MONTH_OUTSIDE_PLAN")) return "O mês informado está fora do período do orçamento.";
   return "Não foi possível concluir a operação. Revise os dados e tente novamente.";
 }

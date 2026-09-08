@@ -187,3 +187,22 @@ reais em `auth.users`. RLS nunca é desabilitada.
   Juros e encargos não o reduzem.
 - Campos materiais ficam imutáveis após entrada ou cronograma. Renegociação e
   aditivos permanecem fora do escopo e deverão preservar o contrato original.
+
+## Orçamento e projeções DRE/DFC v0.1 — 2026-09-08
+
+- Um orçamento agrega versões independentes. Cada versão contém projeções DRE e
+  DFC distintas, sem derivar uma estrutura da outra: DRE representa competência
+  mensal e DFC representa o mês esperado de caixa.
+- Valores mensais usam `NUMERIC`, e gravações da grade são feitas em lote por RPC
+  transacional. Totais são derivados, não persistidos como valores redundantes.
+- A apropriação usa Fazenda direta ou Regra de Rateio. Ao publicar, a versão e
+  seus snapshots de apropriação tornam-se imutáveis; uma mudança exige revisão.
+- Uma conta só entra em uma projeção quando possui mapping explícito para
+  `PROJECAO_DRE` ou `PROJECAO_DFC`. As quatro contas gerenciais pendentes continuam
+  sem mapping, e a ausência é comunicada em vez de inferida pelo nome.
+- A comparação futura Projetado × Realizado deverá calcular o desvio como
+  `Realizado / Projetado - 1`. Projetado igual a zero será um caso explícito e
+  não produzirá divisão, infinito ou percentual enganoso.
+- As anomalias históricas documentadas (juros, Comissão, referência quebrada,
+  cross-block da DRE Safra e percentuais fixos divergentes) não foram promovidas
+  a regras de planejamento.

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, CalendarRange, ChevronDown, CircleDollarSign, GitBranch, HandCoins, Home, Landmark, ListTree, LogOut, MapPinned, ReceiptText, Users, UserRoundSearch } from "lucide-react";
+import { Building2, CalendarRange, ChartNoAxesCombined, ChevronDown, CircleDollarSign, GitBranch, HandCoins, Home, Landmark, ListTree, LogOut, MapPinned, ReceiptText, Users, UserRoundSearch } from "lucide-react";
 import { logout } from "@/features/auth/actions";
 import { Button } from "@/components/ui/button";
 import type { OrganizationContext } from "@/types/database";
@@ -9,6 +9,7 @@ const links = [
   { href: "/lancamentos", label: "Lançamentos", icon: CircleDollarSign, permission: "entries.view" },
   { href: "/parcelamentos", label: "Parcelamentos", icon: ReceiptText, permission: "entries.view" },
   { href: "/financiamentos", label: "Financiamentos", icon: HandCoins, permission: "financing.view" },
+  { href: "/orcamentos", label: "Orçamentos", icon: ChartNoAxesCombined, permission: "budgets.view" },
   { href: "/fazendas", label: "Fazendas", icon: MapPinned, permission: "farms.view" },
   { href: "/safras", label: "Safras", icon: CalendarRange, permission: "seasons.view" },
   { href: "/plano-de-contas", label: "Plano de Contas", icon: ListTree, permission: "chart_accounts.view" },
