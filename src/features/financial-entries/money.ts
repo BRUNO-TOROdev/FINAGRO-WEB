@@ -11,11 +11,35 @@ export function moneyToDatabase(raw: string): string {
   return result;
 }
 
-export function formatBRL(raw: string): string {
-  const match = raw.match(/^(-?)(\d+)(?:\.(\d{1,2}))?$/);
-  if (!match) return raw;
+export function nonNegativeMoneyToDatabase(raw: string): string {
+  const value = raw.trim() || "0";
+  const match = value.match(MONEY);
+  if (!match) throw new Error("INVALID_MONEY");
+  const whole = match[2].replaceAll(".", "");
+  const cents = (match[3] ?? "").padEnd(2, "0");
+  const integer = BigInt(`${match[1]}${whole}${cents}`);
+  if (integer < 0n) throw new Error("AMOUNT_MUST_NOT_BE_NEGATIVE");
+  return `${BigInt(whole)}.${cents}`;
+}
+
+export function formatBRL(raw: string | number): string {
+  const value = String(raw);
+  const match = value.match(/^(-?)(\d+)(?:\.(\d{1,2}))?$/);
+  if (!match) return value;
   const whole = BigInt(match[2]).toLocaleString("pt-BR");
   return `${match[1] ? "-" : ""}R$ ${whole},${(match[3] ?? "").padEnd(2, "0")}`;
+}
+
+export function databaseMoneyToCents(raw: string | number): bigint {
+  const match = String(raw).match(/^(-?)(\d+)(?:\.(\d{1,2}))?$/);
+  if (!match) throw new Error("INVALID_DATABASE_MONEY");
+  return BigInt(`${match[1]}${match[2]}${(match[3] ?? "").padEnd(2, "0")}`);
+}
+
+export function centsToDatabaseMoney(cents: bigint): string {
+  const negative = cents < 0n;
+  const absolute = negative ? -cents : cents;
+  return `${negative ? "-" : ""}${absolute / 100n}.${(absolute % 100n).toString().padStart(2, "0")}`;
 }
 
 export const editableFinancialStatuses = ["PENDENTE", "AGENDADO"] as const;

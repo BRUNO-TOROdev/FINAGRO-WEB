@@ -170,3 +170,20 @@ reais em `auth.users`. RLS nunca é desabilitada.
 - Os códigos `FINAGRO-V1-*` são identificadores internos estáveis, não códigos
   contábeis. Como a fonte não fornece os campos gerenciais do novo schema, o
   template usa `OUTRO`/`NEUTRA` e flags financeiras desativadas, sem inferência.
+
+## Financiamentos e Empréstimos v0.1 — 2026-09-04
+
+- `financing_contracts` é contratual e não constitui movimento. Entrada do
+  crédito, principal, juros e encargos são lançamentos independentes.
+- O cronograma informado prevalece. SAC, Price, taxa e indexador são metadados
+  informativos e não acionam recálculo no MVP.
+- `financing_installments` permanece como cronograma contratual; os lançamentos
+  usam a apropriação e os settlements/reversões já homologados.
+- Principal e juros usam os vínculos existentes. Tarifas, seguros e outros ficam
+  em `financing_installment_charges`, com conta e lançamento próprios.
+- A conclusão ocorre em uma RPC transacional. Divergência de principal exige
+  confirmação explícita e nunca é ajustada pelo sistema.
+- Saldo devedor é principal contratado menos settlements ativos de principal.
+  Juros e encargos não o reduzem.
+- Campos materiais ficam imutáveis após entrada ou cronograma. Renegociação e
+  aditivos permanecem fora do escopo e deverão preservar o contrato original.

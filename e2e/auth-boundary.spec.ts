@@ -15,3 +15,10 @@ test("login local responde e apresenta o formulário de autenticação", async (
   expect(html).toContain('name="email"');
   expect(html).toContain('name="password"');
 });
+
+test("rota de financiamentos preserva a fronteira autenticada", async ({ request }) => {
+  const response = await request.get("/app/tenant-inexistente/financiamentos", { maxRedirects: 0 });
+  expect(response.status()).toBeGreaterThanOrEqual(300);
+  expect(response.status()).toBeLessThan(400);
+  expect(response.headers().location).toContain("/login");
+});
