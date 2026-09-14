@@ -224,3 +224,22 @@ reais em `auth.users`. RLS nunca é desabilitada.
   agregada na cobertura, sem expor contraparte, descrição ou documento.
 - A exceção histórica do período de juros não foi promovida. A regra homologada
   de emissão vale para toda a DRE realizada.
+
+## DRE Safra v0.1 — 2026-09-11
+
+- DRE Safra é uma estrutura própria e não aplica `crop_season_id` globalmente.
+  Linhas regulares usam emissão dentro do ciclo real da Safra principal.
+- As quatro linhas sazonais homologadas são configuradas por IDs em
+  `report_season_rule_templates` e copiadas para `report_season_rules` da
+  organização: Adubo, Fretes sobre Matéria Prima, Produtos Quimicos e Sementes.
+- Para essas linhas, cada mês exibido soma Safra + Safrinha no próprio mês e no
+  mesmo mês do ano anterior. O `EOMONTH(mês,-13)+1` histórico foi traduzido para
+  deslocamento explícito de 12 meses, sem offsets de célula.
+- O intervalo exibido deriva de `crop_seasons.starts_on/ends_on`, podendo cruzar
+  anos civis. A seleção secundária exige entidade do tipo `SAFRINHA`.
+- A planilha também contém a fórmula sazonal em Calcário e Gesso, divergindo das
+  quatro contas homologadas no checkpoint. Essas duas regras não foram promovidas;
+  seu uso aparece como configuração sazonal ausente para validação humana.
+- A engine usa `entry_allocations` snapshotadas, PostgreSQL `NUMERIC` e fórmulas
+  gerenciais por papéis/códigos. Status, vencimento, settlements, nomes e
+  percentuais históricos fixos não participam do cálculo.

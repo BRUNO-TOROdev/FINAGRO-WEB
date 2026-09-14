@@ -21,6 +21,7 @@ TEST_FILES = (
     ROOT / "tests" / "managerial_chart_mappings.sql",
     ROOT / "tests" / "budget_projections.sql",
     ROOT / "tests" / "realized_dre.sql",
+    ROOT / "tests" / "realized_dre_crop_season.sql",
 )
 
 

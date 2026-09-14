@@ -44,3 +44,17 @@ Somente os itens abaixo exigem validação humana. Nenhum deles foi promovido a 
 - Alternativa A: manter sem mapping até definição funcional.
 - Alternativa B: homologar uma linha específica e finalidade distinta.
 - Impacto: determina se a conta poderá participar de DFC/projeção e como será classificada.
+
+## 6. Calcário e Gesso na fórmula sazonal
+
+- Conta/regra: `Custos_com_Materiais_Agricultura → Calcário` e `→ Gesso`.
+- Observado: a aba `DRE SAFRA` em branco aplica a mesma combinação Safra +
+  Safrinha, mês corrente + mesmo mês do ano anterior, às seis subcontas do grupo.
+  O checkpoint de produto homologou explicitamente quatro: Adubo, Fretes sobre
+  Matéria Prima, Produtos Quimicos e Sementes.
+- Evidência: fórmulas C29:C34, repetidas até N29:N34. C30 e C32 possuem os mesmos
+  quatro `SUMIFS` e critérios de C29, C31, C33 e C34.
+- Alternativa A: homologar Calcário e Gesso como sazonais.
+- Alternativa B: manter somente as quatro contas indicadas pelo produto.
+- Impacto: define se lançamentos dessas duas contas usam o recorte de Safra +
+  Safrinha e o período anterior ou permanecem bloqueados por configuração sazonal ausente.
