@@ -11,16 +11,7 @@ Somente os itens abaixo exigem validação humana. Nenhum deles foi promovido a 
 - Alternativa B: preservar vencimento como exceção explícita.
 - Impacto: altera o mês de reconhecimento dos juros na futura DRE.
 
-## 2. Período da Comissão no Fluxo de Caixa
-
-- Conta/regra: `Despesas_Variáveis → Comissão`.
-- Observado: no Fluxo de Caixa em branco, a fórmula usa período da DRE; as demais saídas usam período do Fluxo.
-- Evidência: fórmula da linha Comissão na aba Fluxo de Caixa.
-- Alternativa A: usar vencimento, mantendo a regra geral do DFC previsto.
-- Alternativa B: preservar emissão como exceção explícita.
-- Impacto: altera a posição mensal da comissão no futuro DFC.
-
-## 3. Escopo da DRE Safra fora dos custos agrícolas
+## 2. Escopo da DRE Safra fora dos custos agrícolas
 
 - Conta/regra: todas as linhas da DRE Safra exceto `Custos_com_Materiais_Agricultura`.
 - Observado: elas usam período de emissão, mas não usam `Base_Período_Safra`; somente os custos agrícolas combinam Safra + Safrinha e período anterior.
@@ -29,7 +20,7 @@ Somente os itens abaixo exigem validação humana. Nenhum deles foi promovido a 
 - Alternativa B: definir uma nova política de Safra para outras linhas antes de implementar o relatório.
 - Impacto: determina quais receitas/despesas entram na futura DRE Safra.
 
-## 4. Transferências entre contas
+## 3. Transferências entre contas
 
 - Conta/regra: Grupo `Transferência_Entre_Contas` e filhos Entrada/Saída.
 - Observado: existem no cadastro, mas não aparecem nas estruturas consolidadas de DRE ou Fluxo de Caixa inspecionadas.
@@ -37,7 +28,7 @@ Somente os itens abaixo exigem validação humana. Nenhum deles foi promovido a 
 - Alternativa B: exibir apenas em visão bancária/por conta, com eliminação na consolidação.
 - Impacto: evita dupla contagem de entrada e saída; condiciona o futuro desenho de transferências e conciliação.
 
-## 5. Entradas Não Operacionais sem lista válida
+## 4. Entradas Não Operacionais sem lista válida
 
 - Conta/regra: Grupo `Entradas_Não_Operacionais`.
 - Observado: o Grupo existe, não possui Subgrupos oficiais e o nome definido correspondente contém `#REF!`; a estrutura usa `Receitas_Não_Operacionais` em seu lugar.

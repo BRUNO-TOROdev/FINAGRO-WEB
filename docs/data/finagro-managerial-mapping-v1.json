@@ -219,6 +219,13 @@
     },
     {
       "structure": "DFC_PREVISTO",
+      "code": "DFC_PREVISTO.CALC.SALDO_INICIAL_MENSAL",
+      "label": "SALDO INICIAL",
+      "line_type": "CALCULATED",
+      "confidence": "confirmed_spreadsheet"
+    },
+    {
+      "structure": "DFC_PREVISTO",
       "code": "DFC_PREVISTO.CALC.SALDO_CAIXA_ACUMULADO",
       "label": "SALDO CAIXA ACUMULADO",
       "line_type": "CALCULATED",
@@ -8129,7 +8136,9 @@
         }
       ],
       "confidence": "confirmed_spreadsheet",
-      "notes": []
+      "notes": [
+        "DFC: a referência isolada da Comissão ao período da DRE foi classificada como historical_anomaly; a regra operacional homologada usa DUE_DATE."
+      ]
     },
     {
       "template_item_id": "35d0e721-abb0-5d63-8142-f2f0672d100c",

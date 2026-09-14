@@ -22,6 +22,7 @@ TEST_FILES = (
     ROOT / "tests" / "budget_projections.sql",
     ROOT / "tests" / "realized_dre.sql",
     ROOT / "tests" / "realized_dre_crop_season.sql",
+    ROOT / "tests" / "realized_cash_flow.sql",
 )
 
 

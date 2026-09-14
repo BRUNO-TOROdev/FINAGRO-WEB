@@ -246,3 +246,19 @@ reais em `auth.users`. RLS nunca é desabilitada.
 - A engine usa `entry_allocations` snapshotadas, PostgreSQL `NUMERIC` e fórmulas
   gerenciais por papéis/códigos. Status, vencimento, settlements, nomes e
   percentuais históricos fixos não participam do cálculo.
+
+## Fluxo de Caixa FINAGRO realizado v0.1 — 2026-09-14
+
+- A visão usa exclusivamente `financial_entries.due_date`. Emissão, settlement e
+  agendamento não alteram o mês.
+- A fórmula histórica não filtra STATUS; `PENDENTE`, `AGENDADO` e `PAGO` entram.
+- Entradas e saídas seguem `report_account_mappings.typical_direction`, não o nome
+  da conta nem sinal digitado. Saldo inicial é neutro e não vira receita.
+- O saldo inicial do primeiro mês vem da conta de abertura; meses seguintes usam
+  o saldo final anterior. Saldo final é linha calculada e não gera lançamento.
+- Entrada de financiamento, principal e juros permanecem linhas analíticas
+  separadas. Contratos e planos de parcela não são somados como movimentos.
+- Transferências e Entradas Não Operacionais permanecem sem mapping e aparecem
+  na cobertura quando utilizadas.
+- A referência isolada da Comissão ao período da DRE foi classificada como
+  anomalia histórica. A regra homologada para todo o DFC FINAGRO é vencimento.
