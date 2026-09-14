@@ -237,9 +237,12 @@ reais em `auth.users`. RLS nunca é desabilitada.
   deslocamento explícito de 12 meses, sem offsets de célula.
 - O intervalo exibido deriva de `crop_seasons.starts_on/ends_on`, podendo cruzar
   anos civis. A seleção secundária exige entidade do tipo `SAFRINHA`.
-- A planilha também contém a fórmula sazonal em Calcário e Gesso, divergindo das
-  quatro contas homologadas no checkpoint. Essas duas regras não foram promovidas;
-  seu uso aparece como configuração sazonal ausente para validação humana.
+- A planilha também contém fórmula sazonal em Calcário e Gesso. Por decisão humana
+  homologada em 2026-09-14, ambos são `REGULAR`; a ocorrência no Excel é uma
+  anomalia histórica e não participa da engine. Permanecem sazonais somente Adubo,
+  Fretes sobre Matéria Prima, Produtos Quimicos e Sementes.
+- O comportamento de cada mapping da DRE Safra é explícito (`REGULAR` ou
+  `SEASONAL`); linhas calculadas permanecem identificadas por `report_lines.line_type`.
 - A engine usa `entry_allocations` snapshotadas, PostgreSQL `NUMERIC` e fórmulas
   gerenciais por papéis/códigos. Status, vencimento, settlements, nomes e
   percentuais históricos fixos não participam do cálculo.

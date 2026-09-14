@@ -26,15 +26,16 @@ No sistema, essa fórmula foi traduzida para:
 
 - Sazonais homologadas: Adubo, Fretes sobre Matéria Prima, Produtos Quimicos e
   Sementes. A execução usa IDs de template, mapping e conta organizacional.
-- Regulares: demais mappings sem regra sazonal. Usam emissão no ciclo exibido.
+- Regulares: demais mappings explicitamente classificados como `REGULAR`. Usam
+  emissão no ciclo exibido. Calcário e Gesso são `REGULAR` por decisão humana
+  homologada e não dependem da Safra/Safrinha selecionada.
 - Calculadas: dez linhas da DRE, derivadas por operandos explícitos e sem conta lançável.
 
 ## Divergências e anomalias
 
-- **Requer validação humana:** Calcário e Gesso também contêm os quatro `SUMIFS`
-  sazonais na planilha, mas não constam entre as quatro contas homologadas pelo
-  checkpoint. Não receberam regra definitiva. Se usados, são sinalizados como
-  mapping com configuração sazonal ausente.
+- **Anomalia histórica (`historical_anomaly`):** Calcário e Gesso contêm quatro
+  `SUMIFS` sazonais na planilha. A decisão humana homologada estabelece ambos
+  como `REGULAR`; essas fórmulas não representam a regra de negócio da FINAGRO Web.
 - **Diferença esperada por correção estrutural:** percentuais fixos, exceções de
   70% e diferenças entre blocos por Fazenda não foram reproduzidos. A fonte é o
   snapshot de `entry_allocations`.
@@ -45,7 +46,15 @@ No sistema, essa fórmula foi traduzida para:
 
 ## Resultado
 
-**PASS com uma pendência explícita.** A equivalência das quatro contas autorizadas,
-do ciclo atravessando anos, das linhas regulares, das fórmulas calculadas e das
-apropriações foi automatizada. Calcário e Gesso aguardam decisão humana e não foram
-silenciosamente convertidos em regra operacional.
+**PASS.** A equivalência das quatro contas sazonais autorizadas, do ciclo
+atravessando anos, das linhas regulares, das fórmulas calculadas e das apropriações
+foi automatizada. Calcário e Gesso foram fixados explicitamente como regulares.
+
+## Decisão humana homologada — 2026-09-14
+
+- Calcário: `REGULAR`; competência por `financial_entries.issue_date`, sem filtro
+  de `crop_season_id`, sem combinação com o ano anterior e sem alerta sazonal.
+- Gesso: `REGULAR`; competência por `financial_entries.issue_date`, sem filtro de
+  `crop_season_id`, sem combinação com o ano anterior e sem alerta sazonal.
+- Permanecem sazonais somente Adubo, Fretes sobre Matéria Prima, Produtos
+  Quimicos e Sementes, identificados por IDs/mappings.

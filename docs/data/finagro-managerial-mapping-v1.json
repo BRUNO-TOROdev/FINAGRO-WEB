@@ -577,9 +577,9 @@
           "structure": "DRE_SAFRA",
           "report_line_code": "DRE_SAFRA.FINAGRO-V1-G002",
           "recognition_basis": "ISSUE_DATE",
-          "crop_filter_mode": "SAFRA_AND_SAFRINHA_CURRENT_AND_PRIOR_YEAR",
+          "crop_filter_mode": "NONE",
           "confidence": "confirmed_spreadsheet",
-          "evidence": "DRE SAFRA: SUMIFS combina Safra e Safrinha nos meses corrente e deslocado em 13 meses"
+          "evidence": "Grupo de apresentação; sazonalidade é configurada explicitamente somente nas quatro contas filhas homologadas"
         },
         {
           "structure": "DFC_PREVISTO",
@@ -691,9 +691,9 @@
           "structure": "DRE_SAFRA",
           "report_line_code": "DRE_SAFRA.FINAGRO-V1-G002-S002",
           "recognition_basis": "ISSUE_DATE",
-          "crop_filter_mode": "SAFRA_AND_SAFRINHA_CURRENT_AND_PRIOR_YEAR",
+          "crop_filter_mode": "NONE",
           "confidence": "confirmed_spreadsheet",
-          "evidence": "DRE SAFRA: SUMIFS combina Safra e Safrinha nos meses corrente e deslocado em 13 meses"
+          "evidence": "Decisão humana homologada: Calcário é REGULAR; fórmula sazonal histórica classificada como historical_anomaly"
         },
         {
           "structure": "DFC_PREVISTO",
@@ -721,7 +721,9 @@
         }
       ],
       "confidence": "confirmed_spreadsheet",
-      "notes": []
+      "notes": [
+        "DRE Safra: REGULAR por decisão humana homologada; a fórmula sazonal histórica do Excel não é regra operacional."
+      ]
     },
     {
       "template_item_id": "2c2a6c30-57c2-58c8-9356-4f41f07f7975",
@@ -805,9 +807,9 @@
           "structure": "DRE_SAFRA",
           "report_line_code": "DRE_SAFRA.FINAGRO-V1-G002-S004",
           "recognition_basis": "ISSUE_DATE",
-          "crop_filter_mode": "SAFRA_AND_SAFRINHA_CURRENT_AND_PRIOR_YEAR",
+          "crop_filter_mode": "NONE",
           "confidence": "confirmed_spreadsheet",
-          "evidence": "DRE SAFRA: SUMIFS combina Safra e Safrinha nos meses corrente e deslocado em 13 meses"
+          "evidence": "Decisão humana homologada: Gesso é REGULAR; fórmula sazonal histórica classificada como historical_anomaly"
         },
         {
           "structure": "DFC_PREVISTO",
@@ -835,7 +837,9 @@
         }
       ],
       "confidence": "confirmed_spreadsheet",
-      "notes": []
+      "notes": [
+        "DRE Safra: REGULAR por decisão humana homologada; a fórmula sazonal histórica do Excel não é regra operacional."
+      ]
     },
     {
       "template_item_id": "6db7317c-49ed-52d6-b04b-4008c8355e93",
