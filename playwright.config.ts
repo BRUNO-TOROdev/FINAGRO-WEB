@@ -9,7 +9,7 @@ export default defineConfig({
   webServer: {
     command: "node node_modules/next/dist/bin/next dev",
     url: "http://127.0.0.1:3000/login",
-    reuseExistingServer: false,
+    reuseExistingServer: true,
     timeout: 120_000,
   },
 });

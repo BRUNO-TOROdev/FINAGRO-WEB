@@ -1,5 +1,15 @@
 # FINAGRO Web — Decisões da Fundação de Dados v0.2
 
+## Importação controlada FINAGRO v0.1 — 2026-10-01
+
+- A planilha é lida no servidor e somente a aba `Base de Dados` entra no pipeline; campos derivados como mês e extrato não são persistidos como fonte de verdade.
+- Todo arquivo passa primeiro por staging/dry-run em período fechado, identificado por hash SHA-256, com validações e transformações auditáveis por linha.
+- A confirmação é transacional e reutiliza `save_financial_entry`, preservando invariantes, RLS, apropriação direta e snapshot de rateio.
+- `GERAL` nunca é Fazenda: exige mapping explícito para uma regra de rateio ativa e coerente com a Safra.
+- A reversão é lógica e limitada aos lançamentos `IMPORTACAO` vinculados ao lote; settlements ativos impedem reversão silenciosa.
+- Linhas históricas `PAGO` permanecem bloqueadas até homologação humana da política de data de liquidação. Nenhum settlement é inferido.
+- O arquivo binário e dados reais permanecem fora do Git; apenas infraestrutura, testes sintéticos e modelos de homologação são versionados.
+
 ## Núcleo operacional financeiro — 2026-09-03
 
 - Contrapartes, contas bancárias e lançamentos reutilizam as entidades homologadas; nenhuma entidade paralela foi criada.
