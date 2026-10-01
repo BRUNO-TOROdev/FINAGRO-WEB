@@ -27,7 +27,8 @@ Registrar também contagens e totais por mês, status, Fazenda/rateio e conta do
 - Linhas bloqueadas:
 - Alertas aceitos:
 - `GERAL` convertido por regra formal de rateio:
-- Registros `PAGO`: **não confirmar sem política humana homologada para settlement date**.
+- Registros `PAGO`: vencimento pode ser usado somente como `DUE_DATE_SURROGATE`, com aviso de data não confirmada, banco mapeado e liquidação integral única.
+- Surrogates não comprovam Caixa Efetivo nem conciliação bancária; correção exige reversão e nova liquidação `CONFIRMED`.
 
 ## Aprovação
 

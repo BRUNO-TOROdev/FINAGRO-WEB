@@ -1,5 +1,13 @@
 # FINAGRO Web — Decisões da Fundação de Dados v0.2
 
+## Liquidação histórica FINAGRO v0.1 — 2026-10-01
+
+- Para migração histórica, `PAGO` sem data efetiva conhecida usa `due_date` como surrogate técnico explicitamente marcado `DUE_DATE_SURROGATE`; isso não confirma a data bancária.
+- Liquidações operacionais permanecem `CONFIRMED`. A correção de um surrogate exige reversão e nova liquidação confirmada, nunca edição.
+- O settlement histórico é integral e único; não são inferidos pagamentos parciais, juros, descontos ou datas intermediárias.
+- Banco/conta devem vir de mapping explícito. Sem banco seguro ou vencimento válido, a linha fica bloqueada.
+- Caixa Efetivo futuro deve excluir surrogates por padrão ou separá-los como não confirmados; conciliação bancária não poderá tratá-los como confirmação.
+
 ## Importação controlada FINAGRO v0.1 — 2026-10-01
 
 - A planilha é lida no servidor e somente a aba `Base de Dados` entra no pipeline; campos derivados como mês e extrato não são persistidos como fonte de verdade.

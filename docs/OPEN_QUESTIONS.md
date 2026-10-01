@@ -1,13 +1,17 @@
 # Questões abertas
 
-## Data de liquidação dos registros históricos `PAGO`
+## Data de liquidação dos registros históricos `PAGO` — resolvida em 2026-10-01
 
 **Afeta:** importação da Base de Dados FINAGRO e criação de settlements.
 
-**Comportamento observado:** a fonte registra status `PAGO`, mas não fornece, de forma homologada, uma data inequívoca de liquidação. Data de emissão e vencimento têm outras semânticas e não podem ser usadas silenciosamente.
+**Decisão homologada:** quando a fonte registra `PAGO` sem data efetiva conhecida, `due_date` será usada exclusivamente como substituta técnica, com `date_basis=DUE_DATE_SURROGATE`. Essa data não representa confirmação bancária nem evidência de Caixa Efetivo.
 
-- Alternativa A — usar vencimento como data de liquidação, explicitamente aprovado para o lote.
-- Alternativa B — exigir arquivo complementar com a data efetiva.
-- Alternativa C — importar inicialmente sem settlement e manter a linha bloqueada até saneamento.
+- Banco/conta precisam estar mapeados; sem correspondência segura, a linha permanece bloqueada.
+- Sem vencimento válido, a linha permanece bloqueada.
+- Correção futura exige reversão do surrogate e nova liquidação `CONFIRMED`; settlements não são editados.
 
-**Impacto:** saldo pago/em aberto, caixa efetivo futuro, auditoria e reversões. Até decisão humana, `PAGO` recebe `PAID_SETTLEMENT_POLICY_REQUIRED` e impede a confirmação do lote.
+**Impacto futuro:** Caixa Efetivo e conciliação bancária devem excluir esses registros por padrão ou apresentá-los separadamente como data não confirmada.
+
+## Rateios do primeiro piloto
+
+Permanece aberta a associação entre cada Safra encontrada em registros `GERAL` de janeiro/2026 e uma `allocation_rule` formal. Nenhuma regra ou percentual será inferido.
