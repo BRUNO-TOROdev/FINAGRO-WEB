@@ -1,5 +1,18 @@
 # FINAGRO Web — Decisões da Fundação de Dados v0.2
 
+## Rateio Geral e titular da operação v0.1 — 2026-10-08
+
+- `GERAL` representa despesa compartilhada da organização. Não é Fazenda, não é Safra e não depende de `crop_season_id`.
+- Regras de rateio agora têm escopo explícito: `SEASONAL` mantém a coerência com Safra; `GENERAL` exige `crop_season_id null`, vigência por datas e total ativo exatamente igual a 100%.
+- Uma regra `GENERAL` é resolvida pela data de emissão do lançamento. Ausência ou ambiguidade bloqueiam a operação; nenhuma regra é escolhida arbitrariamente.
+- Safra permanece dimensão analítica independente e pode coexistir no lançamento sem alterar os percentuais da regra `GENERAL`.
+- O snapshot em `entry_allocations` continua imutável. DRE, DRE Safra, DFC, comparativos e Dashboard continuam consumindo snapshots, sem recalcular o passado.
+- `Vendedor/Beneficiado` da fonte histórica representa o produtor/titular interno da operação. Ele é armazenado em `operation_producers`, entidade tenant-scoped distinta de usuário, contraparte e Fazenda.
+- A contraparte financeira externa é identificada por `Nome da Nota` mais `Cliente/documento`, sempre por mapping explícito durante importação.
+- Matching de Plano de Contas admite apenas `trim` externo inequívoco. O valor original permanece em `source_data` e a transformação é registrada; colisão bloqueia e fuzzy matching não existe.
+- Para o piloto histórico de janeiro/2026 foi homologado exclusivamente para esse período o rateio 45% / 15% / 40% entre três fazendas. Isso não constitui regra permanente futura.
+- Dados reais de produtores, contrapartes e banco/conta permanecem somente no ambiente local e nunca são versionados.
+
 ## Liquidação histórica FINAGRO v0.1 — 2026-10-01
 
 - Para migração histórica, `PAGO` sem data efetiva conhecida usa `due_date` como surrogate técnico explicitamente marcado `DUE_DATE_SURROGATE`; isso não confirma a data bancária.
@@ -13,7 +26,7 @@
 - A planilha é lida no servidor e somente a aba `Base de Dados` entra no pipeline; campos derivados como mês e extrato não são persistidos como fonte de verdade.
 - Todo arquivo passa primeiro por staging/dry-run em período fechado, identificado por hash SHA-256, com validações e transformações auditáveis por linha.
 - A confirmação é transacional e reutiliza `save_financial_entry`, preservando invariantes, RLS, apropriação direta e snapshot de rateio.
-- `GERAL` nunca é Fazenda: exige mapping explícito para uma regra de rateio ativa e coerente com a Safra.
+- `GERAL` nunca é Fazenda: resolve uma regra `GENERAL` ativa e vigente, independente de Safra.
 - A reversão é lógica e limitada aos lançamentos `IMPORTACAO` vinculados ao lote; settlements ativos impedem reversão silenciosa.
 - Linhas históricas `PAGO` permanecem bloqueadas até homologação humana da política de data de liquidação. Nenhum settlement é inferido.
 - O arquivo binário e dados reais permanecem fora do Git; apenas infraestrutura, testes sintéticos e modelos de homologação são versionados.
@@ -25,7 +38,7 @@
 - A edição de um lançamento `PAGO` ou com liquidação ativa é bloqueada nesta etapa. Alterações de valor, fazenda ou regra regeneram apropriações atomicamente; alterações em outros campos preservam o snapshot já gravado.
 - Apropriação direta cria uma única linha de 100%. Rateio usa exclusivamente regra ativa da mesma organização e safra, criando várias apropriações sem multiplicar o lançamento ou o pagamento.
 - O centavo residual continua seguindo o motor homologado: é atribuído à última fazenda na ordenação determinística por UUID, garantindo soma exata do valor.
-- Vendedor/beneficiado é representado pela contraparte opcional existente. Não foi criado um segundo vínculo complexo nesta etapa.
+- Esta decisão foi superada em 2026-10-08: Vendedor/Beneficiado representa o produtor/titular interno, separado da contraparte externa.
 - Forma de pagamento permanece separada da conta bancária. Parcelamentos e liquidações continuam fora do escopo visual.
 - A listagem usa RPC paginada, com limite máximo de 100 linhas por chamada (25 na interface), e aplica filtros no PostgreSQL sob RLS.
 
@@ -43,9 +56,9 @@ Somente `PENDENTE`, `AGENDADO`, `PAGO`.
 
 `PAGO` não é um campo livre: a base exige liquidação integral. Reversão de baixa retira o status `PAGO`.
 
-## Rateio por safra
+## Rateio por Safra e Geral
 - A classificação histórica `GERAL` não é uma fazenda.
-- Despesas compartilhadas usam `allocation_rules` vinculadas a `crop_seasons`.
+- Rateios sazonais usam `allocation_rules` vinculadas a `crop_seasons`; despesas compartilhadas `GERAL` usam escopo `GENERAL`, sem Safra e com vigência.
 - Regra ativa precisa somar 100%.
 - Regra começa inativa para permitir edição antes da ativação.
 - Aplicação gera `entry_allocations` como snapshot histórico.

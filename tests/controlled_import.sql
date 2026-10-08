@@ -27,7 +27,7 @@ select public.analyze_finagro_import('97000000-0000-0000-0000-000000000010','blo
 select test_import.ok((select blocked_rows=3 and is_dry_run and status='ANALISADO' from public.import_batches where source_file_sha256='blocked-hash'),'dry-run classifies blocking rows');
 select test_import.ok((select count(*)=0 from public.financial_entries),'analysis never creates financial entries');
 select test_import.ok((select count(*)=1 from public.import_staging_rows r, jsonb_array_elements(r.issues) i where i->>'code'='HISTORICAL_PAID_BANK_ACCOUNT_REQUIRED'),'PAGO without mapped bank remains blocked');
-select test_import.ok((select count(*)=1 from public.import_staging_rows r, jsonb_array_elements(r.issues) i where i->>'code'='GENERAL_REQUIRES_ALLOCATION_RULE'),'GERAL never becomes a farm');
+select test_import.ok((select count(*)=1 from public.import_staging_rows r, jsonb_array_elements(r.issues) i where i->>'code'='GENERAL_ALLOCATION_RULE_NOT_FOUND_FOR_DATE'),'GERAL never becomes a farm and requires a date-effective GENERAL rule');
 select test_import.fails($$select public.confirm_finagro_import('97000000-0000-0000-0000-000000000010',(select id from public.import_batches where source_file_sha256='blocked-hash'))$$,'IMPORT_BATCH_NOT_READY');
 select test_import.fails($$select public.analyze_finagro_import('97000000-0000-0000-0000-000000000010','blocked.xlsx','blocked-hash','2027-01-01','2027-01-31','[]')$$,'duplicate key');
 select test_import.fails($$select public.save_import_mapping('97000000-0000-0000-0000-000000000010','FARM','B','', '98000000-0000-0000-0000-000000000102',null)$$,'NOT_FOUND_IN_ORGANIZATION');

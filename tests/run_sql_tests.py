@@ -26,6 +26,7 @@ TEST_FILES = (
     ROOT / "tests" / "projected_vs_actual.sql",
     ROOT / "tests" / "management_dashboard.sql",
     ROOT / "tests" / "controlled_import.sql",
+    ROOT / "tests" / "general_allocation_producers.sql",
 )
 
 

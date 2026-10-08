@@ -47,7 +47,7 @@ Não aplicar diretamente em produção. Primeiro:
 - `PAGO` vinculado a liquidação integral;
 - rateio ativo = 100%;
 - snapshot de rateio;
-- rateio por safra;
+- rateio por Safra e rateio Geral da organização com vigência;
 - apropriação = valor exato do lançamento;
 - dinheiro sem float;
 - liquidação imutável/reversível;

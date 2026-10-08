@@ -13,7 +13,7 @@ Construir um SaaS financeiro rural confiável. Priorize correção financeira, i
 7. Nunca exponha Supabase service role ao browser.
 8. Status financeiro: somente `PENDENTE`, `AGENDADO`, `PAGO`.
 9. `PAGO` exige liquidação integral.
-10. `GERAL` não é fazenda; despesas compartilhadas usam regra de rateio por safra.
+10. `GERAL` não é fazenda nem Safra; despesas compartilhadas usam regra `GENERAL` da organização, vigente na data e independente de Safra.
 11. Rateio aplicado é snapshot histórico e não muda retroativamente.
 12. Mais de uma fazenda em um lançamento exige regra formal de rateio.
 13. Plano de contas pertence à organização; FINAGRO é template inicial, não estrutura fixa.

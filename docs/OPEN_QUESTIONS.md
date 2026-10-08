@@ -14,4 +14,4 @@
 
 ## Rateios do primeiro piloto
 
-Permanece aberta a associação entre cada Safra encontrada em registros `GERAL` de janeiro/2026 e uma `allocation_rule` formal. Nenhuma regra ou percentual será inferido.
+Resolvida em 2026-10-08: `GERAL` é independente de Safra. Para o piloto de janeiro/2026 foi homologada uma regra `GENERAL` local, vigente apenas no período, com distribuição 45% / 15% / 40%. O dado real não é versionado e a decisão não cria regra permanente para meses futuros.
