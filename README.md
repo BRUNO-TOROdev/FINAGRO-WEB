@@ -79,6 +79,12 @@ PASS business_invariants_smoke.sql
 PASS p0_foundation.sql
 ```
 
+## Operação da V1
+
+- [Deploy do piloto](docs/operations/V1_DEPLOYMENT.md)
+- [Backup e restore](docs/operations/BACKUP_RESTORE.md)
+- [Runbook de incidente](docs/operations/INCIDENT_RUNBOOK.md)
+
 Os testes são transacionais e terminam com `ROLLBACK`. A suíte P0 cria dois
 usuários em `auth.users`, duas organizações e executa as verificações RLS como
 role `authenticated`; a conexão `postgres` é usada somente para preparar os

@@ -1,5 +1,10 @@
 allowBuilds:
   unrs-resolver: false
+overrides:
+  'brace-expansion@<2.0.0': 1.1.20
+  'brace-expansion@>=2.0.0 <3.0.0': 2.1.6
+  'sharp@<0.35.5': 0.35.5
+  'source-map-js@<1.2.2': 1.2.2
 minimumReleaseAgeExclude:
   - '@rolldown/binding-darwin-arm64@1.2.7'
   - '@rolldown/binding-linux-ppc64-gnu@1.2.7'

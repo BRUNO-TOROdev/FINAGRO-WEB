@@ -1,9 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { getSiteUrl } from "@/lib/supabase/env";
 
 const credentials = z.object({ email: z.email(), password: z.string().min(8) });
 
@@ -25,9 +25,11 @@ export async function logout() {
 export async function requestPasswordReset(formData: FormData) {
   const email = z.email().safeParse(formData.get("email"));
   if (!email.success) redirect("/recuperar-senha?erro=Informe um e-mail válido.");
-  const origin = (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const siteUrl = getSiteUrl();
   const supabase = await createClient();
-  await supabase.auth.resetPasswordForEmail(email.data, { redirectTo: `${origin}/auth/callback?next=/redefinir-senha` });
+  await supabase.auth.resetPasswordForEmail(email.data, {
+    redirectTo: new URL("/auth/callback?next=/redefinir-senha", siteUrl).toString(),
+  });
   redirect("/recuperar-senha?sucesso=Se o e-mail estiver cadastrado, você receberá as instruções.");
 }
 

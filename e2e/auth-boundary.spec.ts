@@ -1,5 +1,14 @@
 import { expect, test } from "@playwright/test";
 
+test("health check confirma aplicação e Supabase sem expor configuração", async ({ request }) => {
+  const response = await request.get("/api/health");
+  expect(response.ok()).toBe(true);
+  const body = await response.json();
+  expect(body.status).toBe("ok");
+  expect(body).not.toHaveProperty("url");
+  expect(body).not.toHaveProperty("key");
+});
+
 test("sessão inexistente em /app é redirecionada para login", async ({ request }) => {
   const response = await request.get("/app", { maxRedirects: 0 });
   expect(response.status()).toBeGreaterThanOrEqual(300);
@@ -10,6 +19,8 @@ test("sessão inexistente em /app é redirecionada para login", async ({ request
 test("login local responde e apresenta o formulário de autenticação", async ({ request }) => {
   const response = await request.get("/login");
   expect(response.ok()).toBe(true);
+  expect(response.headers()["x-content-type-options"]).toBe("nosniff");
+  expect(response.headers()["x-frame-options"]).toBe("DENY");
   const html = await response.text();
   expect(html).toContain("Acesse sua conta");
   expect(html).toContain('name="email"');
