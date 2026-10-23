@@ -48,6 +48,13 @@ test("rota de Fazendas preserva a fronteira autenticada sem erro de renderizaç�
   expect(response.headers().location).toContain("/login");
 });
 
+test("rota de Rateios e seu modo de edição preservam a fronteira autenticada", async ({ request }) => {
+  const response = await request.get("/app/tenant-inexistente/rateios?editar=10000000-0000-0000-0000-000000000001", { maxRedirects: 0 });
+  expect(response.status()).toBeGreaterThanOrEqual(300);
+  expect(response.status()).toBeLessThan(400);
+  expect(response.headers().location).toContain("/login");
+});
+
 test("rota de orçamentos preserva a fronteira autenticada", async ({ request }) => {
   const response = await request.get("/app/tenant-inexistente/orcamentos", { maxRedirects: 0 });
   expect(response.status()).toBeGreaterThanOrEqual(300);

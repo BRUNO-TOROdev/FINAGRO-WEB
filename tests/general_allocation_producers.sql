@@ -7,9 +7,11 @@ grant usage on schema test_general to authenticated;grant execute on all functio
 
 insert into auth.users(id,instance_id,aud,role,email,encrypted_password,email_confirmed_at,raw_app_meta_data,raw_user_meta_data,created_at,updated_at)values
 ('aa000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000000','authenticated','authenticated','general-a@test.local','x',now(),'{}','{}',now(),now()),
+('aa000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000000','authenticated','authenticated','general-reader@test.local','x',now(),'{}','{}',now(),now()),
 ('bb000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000000','authenticated','authenticated','general-b@test.local','x',now(),'{}','{}',now(),now());
 insert into public.organizations(id,legal_name)values('aa000000-0000-0000-0000-000000000010','Tenant A'),('bb000000-0000-0000-0000-000000000020','Tenant B');
 select private.seed_default_roles('aa000000-0000-0000-0000-000000000010','aa000000-0000-0000-0000-000000000001');select private.seed_default_roles('bb000000-0000-0000-0000-000000000020','bb000000-0000-0000-0000-000000000002');
+insert into public.memberships(organization_id,user_id,role_id)select 'aa000000-0000-0000-0000-000000000010','aa000000-0000-0000-0000-000000000003',id from public.roles where organization_id='aa000000-0000-0000-0000-000000000010' and name='Somente leitura';
 insert into public.farms(id,organization_id,name)values
 ('aa000000-0000-0000-0000-000000000101','aa000000-0000-0000-0000-000000000010','Fazenda A'),
 ('aa000000-0000-0000-0000-000000000102','aa000000-0000-0000-0000-000000000010','Fazenda B'),
@@ -29,6 +31,12 @@ select test_general.ok(public.resolve_general_allocation_rule('aa000000-0000-000
 select test_general.fails($$select public.resolve_general_allocation_rule('aa000000-0000-0000-0000-000000000010','2026-02-01')$$,'NOT_FOUND_FOR_DATE');
 select test_general.fails($$select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',null,'Sobreposta',null,true,'2026-01-15','2026-02-15','[{"farm_id":"aa000000-0000-0000-0000-000000000101","percentage":"100"}]')$$,'PERIOD_OVERLAP');
 select test_general.fails($$select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',null,'Cross farm',null,false,'2027-01-01',null,'[{"farm_id":"bb000000-0000-0000-0000-000000000104","percentage":"100"}]')$$,'FARM_NOT_FOUND_IN_ORGANIZATION');
+select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',(select id from public.allocation_rules where name='Geral piloto'),'Geral piloto','Edição do mesmo registro',true,'2026-01-01','2026-01-31','[{"farm_id":"aa000000-0000-0000-0000-000000000101","percentage":"45"},{"farm_id":"aa000000-0000-0000-0000-000000000102","percentage":"15"},{"farm_id":"aa000000-0000-0000-0000-000000000103","percentage":"40"}]');
+select test_general.ok((select count(*)=1 and bool_and(description='Edição do mesmo registro') from public.allocation_rules where organization_id='aa000000-0000-0000-0000-000000000010' and name='Geral piloto'),'OWNER edits the same GENERAL rule without duplication');
+select test_general.fails($$select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',(select id from public.allocation_rules where name='Geral piloto'),'Geral piloto',null,true,'2026-01-01','2026-01-31','[{"farm_id":"aa000000-0000-0000-0000-000000000101","percentage":"44"},{"farm_id":"aa000000-0000-0000-0000-000000000102","percentage":"15"},{"farm_id":"aa000000-0000-0000-0000-000000000103","percentage":"40"}]')$$,'MUST_TOTAL_100');
+select set_config('request.jwt.claim.sub','bb000000-0000-0000-0000-000000000002',true);select test_general.fails($$select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',(select id from public.allocation_rules where name='Geral piloto'),'Cross tenant',null,true,'2026-01-01','2026-01-31','[{"farm_id":"aa000000-0000-0000-0000-000000000101","percentage":"100"}]')$$,'PERMISSION_DENIED');
+select set_config('request.jwt.claim.sub','aa000000-0000-0000-0000-000000000003',true);select test_general.fails($$select public.save_general_allocation_rule('aa000000-0000-0000-0000-000000000010',(select id from public.allocation_rules where name='Geral piloto'),'Read only',null,true,'2026-01-01','2026-01-31','[{"farm_id":"aa000000-0000-0000-0000-000000000101","percentage":"100"}]')$$,'PERMISSION_DENIED');
+select set_config('request.jwt.claim.sub','aa000000-0000-0000-0000-000000000001',true);
 
 select public.save_import_mapping('aa000000-0000-0000-0000-000000000010','PARTY','Empresa Externa A','DOC-A','aa000000-0000-0000-0000-000000000401',null);
 select public.save_import_mapping('aa000000-0000-0000-0000-000000000010','PARTY','Empresa Externa B','DOC-B','aa000000-0000-0000-0000-000000000402',null);
