@@ -18,7 +18,7 @@ export type Farm = {
   organization_id: string;
   name: string;
   internal_code: string | null;
-  total_area_ha: string | null;
+  total_area_ha: number | null;
   is_active: boolean;
 };
 

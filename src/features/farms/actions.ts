@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requirePermission } from "@/lib/auth/server";
 import { createClient } from "@/lib/supabase/server";
 import { userMessage } from "@/lib/errors/user-message";
+import { parseOptionalFarmArea } from "./area";
 import { farmSchema } from "./schema";
 
 function parse(formData: FormData) {
@@ -22,7 +23,7 @@ export async function saveFarm(slug: string, farmId: string | null, formData: Fo
     const record = {
       name: parsed.data.name,
       internal_code: parsed.data.internalCode || null,
-      total_area_ha: parsed.data.totalAreaHa ? parsed.data.totalAreaHa.replace(",", ".") : null,
+      total_area_ha: parseOptionalFarmArea(parsed.data.totalAreaHa),
     };
     const query = farmId
       ? supabase.from("farms").update(record).eq("id", farmId).eq("organization_id", organization.id)
