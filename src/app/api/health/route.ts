@@ -5,12 +5,21 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const checkedAt = new Date().toISOString();
+  let supabase: ReturnType<typeof getSupabaseEnv>;
 
   try {
-    const { url, key } = getSupabaseEnv();
-    const response = await fetch(`${url}/rest/v1/organizations?select=id&limit=1`, {
+    supabase = getSupabaseEnv();
+  } catch {
+    return NextResponse.json(
+      { status: "misconfigured", checkedAt },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  try {
+    const response = await fetch(`${supabase.url}/rest/v1/organizations?select=id&limit=1`, {
       cache: "no-store",
-      headers: { apikey: key },
+      headers: { apikey: supabase.key },
       signal: AbortSignal.timeout(3_000),
     });
 

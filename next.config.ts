@@ -1,12 +1,18 @@
 import type { NextConfig } from "next";
 
 if (process.env.NODE_ENV === "production") {
-  const required = [
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-    "NEXT_PUBLIC_SITE_URL",
-  ] as const;
-  const missing = required.filter((name) => !process.env[name]?.trim());
+  const missing: string[] = [];
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()) {
+    missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  }
+  if (!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim()) {
+    missing.push("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+  }
+  if (!process.env.NEXT_PUBLIC_SITE_URL?.trim()) {
+    missing.push("NEXT_PUBLIC_SITE_URL");
+  }
+
   if (missing.length > 0) {
     throw new Error(`Variáveis obrigatórias ausentes: ${missing.join(", ")}`);
   }
